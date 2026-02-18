@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Center from "@/components/Center";
 import Header from "@/components/Header";
 import { CartContext } from "@/components/CartContext";
@@ -12,20 +13,27 @@ const fadeIn = keyframes`
   to { opacity: 1; transform: translateY(0); }
 `;
 
-const PageWrapper = styled.div`min-height: 100vh; padding-bottom: 80px;`;
+const PageWrapper = styled.div`
+  min-height: 100vh;
+  padding-bottom: 80px;
+`;
 
 const Breadcrumb = styled.div`
   padding: 20px 0 0;
   font-size: 0.82rem;
-  color: #6B6B6B;
+  color: #6b6b6b;
 
   a {
-    color: #6B6B6B;
+    color: #6b6b6b;
     text-decoration: none;
-    &:hover { color: #D4821A; }
+    &:hover {
+      color: #d4821a;
+    }
   }
 
-  span { margin: 0 6px; }
+  span {
+    margin: 0 6px;
+  }
 `;
 
 const ProductGrid = styled.div`
@@ -45,9 +53,9 @@ const ProductGrid = styled.div`
 const ImageSection = styled.div``;
 
 const MainImage = styled.div`
-  background: #F8F5F0;
+  background: #f8f5f0;
   border-radius: 20px;
-  border: 1px solid #E2DDD6;
+  border: 1px solid #e2ddd6;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,7 +68,9 @@ const MainImage = styled.div`
     max-height: 300px;
     object-fit: contain;
     transition: transform 0.3s ease;
-    &:hover { transform: scale(1.04); }
+    &:hover {
+      transform: scale(1.04);
+    }
   }
 `;
 
@@ -74,8 +84,8 @@ const Thumbnail = styled.div`
   width: 72px;
   height: 72px;
   border-radius: 10px;
-  background: #F8F5F0;
-  border: 2px solid ${props => props.active ? '#D4821A' : '#E2DDD6'};
+  background: #f8f5f0;
+  border: 2px solid ${(props) => (props.active ? "#D4821A" : "#E2DDD6")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,7 +99,9 @@ const Thumbnail = styled.div`
     object-fit: contain;
   }
 
-  &:hover { border-color: #D4821A; }
+  &:hover {
+    border-color: #d4821a;
+  }
 `;
 
 const InfoSection = styled.div``;
@@ -99,7 +111,7 @@ const CategoryTag = styled.div`
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #D4821A;
+  color: #d4821a;
   margin-bottom: 12px;
 `;
 
@@ -109,21 +121,21 @@ const ProductTitle = styled.h1`
   margin: 0 0 16px;
   line-height: 1.2;
   letter-spacing: -0.5px;
-  color: #1C1C1E;
+  color: #1c1c1e;
 `;
 
 const PriceTag = styled.div`
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 2.2rem;
   font-weight: 700;
-  color: #1C1C1E;
+  color: #1c1c1e;
   margin-bottom: 20px;
 
   span {
     font-size: 1rem;
     font-weight: 400;
-    font-family: 'DM Sans', sans-serif;
-    color: #6B6B6B;
+    font-family: "DM Sans", sans-serif;
+    color: #6b6b6b;
     margin-right: 4px;
   }
 `;
@@ -135,16 +147,10 @@ const StockInfo = styled.div`
   margin-bottom: 28px;
   padding: 12px 16px;
   border-radius: 10px;
-  background: ${props =>
-    props.out ? '#f9f9f9' :
-    props.low ? '#fef9f0' :
-    '#f0faf4'
-  };
-  border: 1px solid ${props =>
-    props.out ? '#E2DDD6' :
-    props.low ? '#f5c677' :
-    '#b7dfca'
-  };
+  background: ${(props) =>
+    props.out ? "#f9f9f9" : props.low ? "#fef9f0" : "#f0faf4"};
+  border: 1px solid
+    ${(props) => (props.out ? "#E2DDD6" : props.low ? "#f5c677" : "#b7dfca")};
 `;
 
 const StockDot = styled.div`
@@ -152,31 +158,24 @@ const StockDot = styled.div`
   height: 9px;
   border-radius: 50%;
   flex-shrink: 0;
-  background: ${props =>
-    props.out ? '#ccc' :
-    props.low ? '#E67E22' :
-    '#27AE60'
-  };
+  background: ${(props) =>
+    props.out ? "#ccc" : props.low ? "#E67E22" : "#27AE60"};
 `;
 
 const StockLabel = styled.div`
   font-size: 0.875rem;
   font-weight: 600;
-  color: ${props =>
-    props.out ? '#999' :
-    props.low ? '#E67E22' :
-    '#27AE60'
-  };
+  color: ${(props) => (props.out ? "#999" : props.low ? "#E67E22" : "#27AE60")};
 `;
 
 const StockSub = styled.div`
   font-size: 0.78rem;
-  color: #6B6B6B;
+  color: #6b6b6b;
   margin-left: auto;
 `;
 
 const Description = styled.p`
-  color: #4A4A4A;
+  color: #4a4a4a;
   line-height: 1.8;
   font-size: 0.95rem;
   margin: 0 0 32px;
@@ -194,13 +193,13 @@ const QtyLabel = styled.div`
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #6B6B6B;
+  color: #6b6b6b;
 `;
 
 const QtyControl = styled.div`
   display: flex;
   align-items: center;
-  border: 1.5px solid #E2DDD6;
+  border: 1.5px solid #e2ddd6;
   border-radius: 10px;
   overflow: hidden;
 `;
@@ -209,17 +208,22 @@ const QtyBtn = styled.button`
   width: 40px;
   height: 40px;
   border: none;
-  background: #F8F5F0;
+  background: #f8f5f0;
   font-size: 1.2rem;
   cursor: pointer;
   transition: background 0.15s;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1C1C1E;
+  color: #1c1c1e;
 
-  &:hover:not(:disabled) { background: #E2DDD6; }
-  &:disabled { opacity: 0.4; cursor: not-allowed; }
+  &:hover:not(:disabled) {
+    background: #e2ddd6;
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 `;
 
 const QtyNum = styled.span`
@@ -231,7 +235,7 @@ const QtyNum = styled.span`
 
 const InCartNote = styled.div`
   font-size: 0.8rem;
-  color: #6B6B6B;
+  color: #6b6b6b;
 `;
 
 const AddToCartBtn = styled.button`
@@ -240,29 +244,35 @@ const AddToCartBtn = styled.button`
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background: ${props => props.disabled ? '#E2DDD6' : props.added ? '#1C1C1E' : '#D4821A'};
-  color: ${props => props.disabled ? '#aaa' : '#fff'};
+  background: ${(props) =>
+    props.disabled ? "#E2DDD6" : props.added ? "#1C1C1E" : "#D4821A"};
+  color: ${(props) => (props.disabled ? "#aaa" : "#fff")};
   border: none;
   padding: 18px 32px;
   border-radius: 12px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-size: 1.05rem;
   font-weight: 700;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  transition: background 0.2s, transform 0.15s;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+  transition:
+    background 0.2s,
+    transform 0.15s;
   letter-spacing: 0.3px;
 
   &:hover:not(:disabled) {
-    background: ${props => props.added ? '#333' : '#F0A830'};
+    background: ${(props) => (props.added ? "#333" : "#F0A830")};
     transform: translateY(-2px);
   }
 
-  svg { width: 20px; height: 20px; }
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const Divider = styled.hr`
   border: none;
-  border-top: 1px solid #E2DDD6;
+  border-top: 1px solid #e2ddd6;
   margin: 28px 0;
 `;
 
@@ -270,16 +280,33 @@ const MetaRow = styled.div`
   display: flex;
   gap: 8px;
   font-size: 0.85rem;
-  color: #6B6B6B;
+  color: #6b6b6b;
 
-  strong { color: #1C1C1E; }
+  strong {
+    color: #1c1c1e;
+  }
 `;
 
 function getStockInfo(quantity) {
-  if (quantity === 0) return { label: 'Out of stock', sub: 'This item is currently unavailable', type: 'out' };
-  if (quantity <= 3) return { label: `Only ${quantity} left!`, sub: 'Order soon before it sells out', type: 'low' };
-  if (quantity <= 10) return { label: `Low stock — ${quantity} remaining`, sub: 'Limited availability', type: 'low' };
-  return { label: 'In stock', sub: `${quantity} units available`, type: 'ok' };
+  if (quantity === 0)
+    return {
+      label: "Out of stock",
+      sub: "This item is currently unavailable",
+      type: "out",
+    };
+  if (quantity <= 3)
+    return {
+      label: `Only ${quantity} left!`,
+      sub: "Order soon before it sells out",
+      type: "low",
+    };
+  if (quantity <= 10)
+    return {
+      label: `Low stock — ${quantity} remaining`,
+      sub: "Limited availability",
+      type: "low",
+    };
+  return { label: "In stock", sub: `${quantity} units available`, type: "ok" };
 }
 
 export default function ProductPage({ product }) {
@@ -289,19 +316,21 @@ export default function ProductPage({ product }) {
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
-    if (product?._id) registerStock(product._id, product.quantity || 0);
-  }, [product]);
+    if (product?._id) {
+      registerStock(product._id, product.quantity || 0);
+    }
+  }, [product, registerStock]);
 
   if (!product) return <div>Product not found.</div>;
 
-  const inCart = cartProducts.filter(id => id === product._id).length;
+  const inCart = cartProducts.filter((id) => id === product._id).length;
   const remaining = (product.quantity || 0) - inCart;
   const outOfStock = (product.quantity || 0) === 0;
   const canAdd = !outOfStock && remaining > 0 && addQty <= remaining;
   const stock = getStockInfo(product.quantity || 0);
 
   function handleAddQty(delta) {
-    setAddQty(q => Math.max(1, Math.min(q + delta, remaining)));
+    setAddQty((q) => Math.max(1, Math.min(q + delta, remaining)));
   }
 
   function handleAddToCart() {
@@ -316,9 +345,9 @@ export default function ProductPage({ product }) {
       <Header />
       <Center>
         <Breadcrumb>
-          <a href="/">Home</a>
+          <Link href="/">Home</Link>
           <span>›</span>
-          <a href="/products">Products</a>
+          <Link href="/products">Products</Link>
           <span>›</span>
           {product.title}
         </Breadcrumb>
@@ -331,7 +360,11 @@ export default function ProductPage({ product }) {
             {product.images?.length > 1 && (
               <ThumbnailRow>
                 {product.images.map((img, i) => (
-                  <Thumbnail key={i} active={activeImg === i ? 1 : 0} onClick={() => setActiveImg(i)}>
+                  <Thumbnail
+                    key={i}
+                    active={activeImg === i ? 1 : 0}
+                    onClick={() => setActiveImg(i)}
+                  >
                     <img src={img} alt={`thumb-${i}`} />
                   </Thumbnail>
                 ))}
@@ -342,29 +375,55 @@ export default function ProductPage({ product }) {
           <InfoSection>
             {product.category && <CategoryTag>{product.category}</CategoryTag>}
             <ProductTitle>{product.title}</ProductTitle>
-            <PriceTag><span>Rs</span>{product.price}</PriceTag>
+            <PriceTag>
+              <span>Rs</span>
+              {product.price}
+            </PriceTag>
 
-            <StockInfo out={stock.type === 'out' ? 1 : 0} low={stock.type === 'low' ? 1 : 0}>
-              <StockDot out={stock.type === 'out' ? 1 : 0} low={stock.type === 'low' ? 1 : 0} />
+            <StockInfo
+              out={stock.type === "out" ? 1 : 0}
+              low={stock.type === "low" ? 1 : 0}
+            >
+              <StockDot
+                out={stock.type === "out" ? 1 : 0}
+                low={stock.type === "low" ? 1 : 0}
+              />
               <div>
-                <StockLabel out={stock.type === 'out' ? 1 : 0} low={stock.type === 'low' ? 1 : 0}>
+                <StockLabel
+                  out={stock.type === "out" ? 1 : 0}
+                  low={stock.type === "low" ? 1 : 0}
+                >
                   {stock.label}
                 </StockLabel>
               </div>
               <StockSub>{stock.sub}</StockSub>
             </StockInfo>
 
-            {product.description && <Description>{product.description}</Description>}
+            {product.description && (
+              <Description>{product.description}</Description>
+            )}
 
             {!outOfStock && remaining > 0 && (
               <QtyRow>
                 <QtyLabel>Qty</QtyLabel>
                 <QtyControl>
-                  <QtyBtn onClick={() => handleAddQty(-1)} disabled={addQty <= 1}>−</QtyBtn>
+                  <QtyBtn
+                    onClick={() => handleAddQty(-1)}
+                    disabled={addQty <= 1}
+                  >
+                    −
+                  </QtyBtn>
                   <QtyNum>{addQty}</QtyNum>
-                  <QtyBtn onClick={() => handleAddQty(1)} disabled={addQty >= remaining}>+</QtyBtn>
+                  <QtyBtn
+                    onClick={() => handleAddQty(1)}
+                    disabled={addQty >= remaining}
+                  >
+                    +
+                  </QtyBtn>
                 </QtyControl>
-                {inCart > 0 && <InCartNote>{inCart} already in cart</InCartNote>}
+                {inCart > 0 && (
+                  <InCartNote>{inCart} already in cart</InCartNote>
+                )}
               </QtyRow>
             )}
 
@@ -374,20 +433,22 @@ export default function ProductPage({ product }) {
               added={added ? 1 : 0}
             >
               {outOfStock ? (
-                'Out of Stock'
+                "Out of Stock"
               ) : remaining <= 0 ? (
                 `Cart full (${inCart} added)`
               ) : added ? (
-                `✓ Added ${addQty > 1 ? `${addQty} items` : ''} to Cart`
+                `✓ Added ${addQty > 1 ? `${addQty} items` : ""} to Cart`
               ) : (
-                <><CartIcon /> Add {addQty > 1 ? `${addQty} items` : ''} to Cart</>
+                <>
+                  <CartIcon /> Add {addQty > 1 ? `${addQty} items` : ""} to Cart
+                </>
               )}
             </AddToCartBtn>
 
             <Divider />
 
             <MetaRow>
-              <strong>Category:</strong> {product.category || 'Uncategorized'}
+              <strong>Category:</strong> {product.category || "Uncategorized"}
             </MetaRow>
           </InfoSection>
         </ProductGrid>
@@ -402,6 +463,6 @@ export async function getServerSideProps({ params }) {
   return {
     props: {
       product: JSON.parse(JSON.stringify(product)),
-    }
+    },
   };
 }

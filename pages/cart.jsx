@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CartContext } from "@/components/CartContext";
 import Center from "@/components/Center";
 import Header from "@/components/Header";
@@ -15,7 +16,7 @@ const PageWrapper = styled.div`
 `;
 
 const PageHeader = styled.div`
-  background: #1C1C1E;
+  background: #1c1c1e;
   color: #fff;
   padding: 56px 0 44px;
   margin-bottom: 60px;
@@ -26,7 +27,7 @@ const Label = styled.div`
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: #D4821A;
+  color: #d4821a;
   margin-bottom: 10px;
 `;
 
@@ -52,7 +53,7 @@ const ColumnsWrapper = styled.div`
 const Box = styled.div`
   background: #fff;
   border-radius: 16px;
-  border: 1px solid #E2DDD6;
+  border: 1px solid #e2ddd6;
   padding: 32px;
   height: fit-content;
 `;
@@ -69,7 +70,7 @@ const CartItem = styled.div`
   gap: 16px;
   align-items: center;
   padding: 18px 0;
-  border-bottom: 1px solid #E2DDD6;
+  border-bottom: 1px solid #e2ddd6;
 
   &:last-of-type {
     border-bottom: none;
@@ -80,7 +81,7 @@ const ItemImage = styled.div`
   width: 80px;
   height: 80px;
   border-radius: 10px;
-  background: #F8F5F0;
+  background: #f8f5f0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,14 +104,14 @@ const ItemName = styled.div`
 
 const ItemPrice = styled.div`
   font-size: 0.85rem;
-  color: #6B6B6B;
+  color: #6b6b6b;
 `;
 
 const QtyControl = styled.div`
   display: flex;
   align-items: center;
   gap: 0;
-  border: 1.5px solid #E2DDD6;
+  border: 1.5px solid #e2ddd6;
   border-radius: 8px;
   overflow: hidden;
 `;
@@ -119,8 +120,8 @@ const QtyBtn = styled.button`
   width: 34px;
   height: 34px;
   border: none;
-  background: #F8F5F0;
-  color: #1C1C1E;
+  background: #f8f5f0;
+  color: #1c1c1e;
   font-size: 1.1rem;
   cursor: pointer;
   transition: background 0.15s;
@@ -129,7 +130,7 @@ const QtyBtn = styled.button`
   justify-content: center;
 
   &:hover {
-    background: #E2DDD6;
+    background: #e2ddd6;
   }
 `;
 
@@ -146,7 +147,7 @@ const TotalRow = styled.div`
   align-items: center;
   padding: 20px 0 0;
   margin-top: 8px;
-  border-top: 2px solid #1C1C1E;
+  border-top: 2px solid #1c1c1e;
 `;
 
 const TotalLabel = styled.div`
@@ -155,7 +156,7 @@ const TotalLabel = styled.div`
 `;
 
 const TotalPrice = styled.div`
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 1.6rem;
   font-weight: 700;
 `;
@@ -163,11 +164,21 @@ const TotalPrice = styled.div`
 const EmptyCart = styled.div`
   text-align: center;
   padding: 60px 20px;
-  color: #6B6B6B;
+  color: #6b6b6b;
 
-  div { font-size: 3rem; margin-bottom: 16px; }
-  h3 { font-family: 'Playfair Display', serif; color: #1C1C1E; margin-bottom: 8px; }
-  a { color: #D4821A; font-weight: 500; }
+  div {
+    font-size: 3rem;
+    margin-bottom: 16px;
+  }
+  h3 {
+    font-family: "Playfair Display", serif;
+    color: #1c1c1e;
+    margin-bottom: 8px;
+  }
+  a {
+    color: #d4821a;
+    font-weight: 500;
+  }
 `;
 
 const FormGroup = styled.div`
@@ -177,16 +188,16 @@ const FormGroup = styled.div`
 const FormInput = styled.input`
   width: 100%;
   padding: 11px 14px;
-  border: 1.5px solid #E2DDD6;
+  border: 1.5px solid #e2ddd6;
   border-radius: 8px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-size: 0.9rem;
-  background: #F8F5F0;
+  background: #f8f5f0;
   transition: border-color 0.2s;
   outline: none;
 
   &:focus {
-    border-color: #D4821A;
+    border-color: #d4821a;
     background: #fff;
   }
 `;
@@ -199,20 +210,22 @@ const FormRow = styled.div`
 
 const CheckoutBtn = styled.button`
   width: 100%;
-  background: #D4821A;
+  background: #d4821a;
   color: #fff;
   border: none;
   padding: 15px;
   border-radius: 10px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
+  transition:
+    background 0.2s,
+    transform 0.15s;
   margin-top: 8px;
 
   &:hover {
-    background: #F0A830;
+    background: #f0a830;
     transform: translateY(-1px);
   }
 
@@ -227,13 +240,23 @@ const SuccessBox = styled.div`
   text-align: center;
   padding: 80px 20px;
 
-  div { font-size: 4rem; margin-bottom: 20px; }
-  h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 12px; }
-  p { color: #6B6B6B; }
+  div {
+    font-size: 4rem;
+    margin-bottom: 20px;
+  }
+  h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+  p {
+    color: #6b6b6b;
+  }
 `;
 
 const Cart = () => {
-  const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
+  const { cartProducts, addProduct, removeProduct, clearCart } =
+    useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -264,14 +287,29 @@ const Cart = () => {
   }, []);
 
   async function goToPayment() {
-    if (!name || !email || !phone || !city || !postalCode || !streetAddress || !country) {
+    if (
+      !name ||
+      !email ||
+      !phone ||
+      !city ||
+      !postalCode ||
+      !streetAddress ||
+      !country
+    ) {
       alert("Please fill in all fields.");
       return;
     }
     setLoading(true);
     try {
       const response = await axios.post("/api/checkout", {
-        name, email, phone, city, postalCode, streetAddress, country, cartProducts,
+        name,
+        email,
+        phone,
+        city,
+        postalCode,
+        streetAddress,
+        country,
+        cartProducts,
       });
       if (response?.data?.url) {
         window.location.href = response.data.url;
@@ -299,7 +337,10 @@ const Cart = () => {
           <SuccessBox>
             <div>✅</div>
             <h2>Order Confirmed!</h2>
-            <p>Thanks for shopping at myPasal. We'll email you when your order is on its way.</p>
+            <p>
+              Thanks for shopping at myPasal. We'll email you when your order is
+              on its way.
+            </p>
           </SuccessBox>
         </Center>
       </>
@@ -323,12 +364,17 @@ const Cart = () => {
               <EmptyCart>
                 <div>🛒</div>
                 <h3>Your cart is empty</h3>
-                <p>Looks like you haven't added anything yet. <a href="/products">Browse products →</a></p>
+                <p>
+                  Looks like you haven&apos;t added anything yet.{" "}
+                  <Link href="/products">Browse products →</Link>
+                </p>
               </EmptyCart>
             ) : (
               <>
                 {products.map((product) => {
-                  const qty = cartProducts.filter(id => id === product._id).length;
+                  const qty = cartProducts.filter(
+                    (id) => id === product._id,
+                  ).length;
                   return (
                     <CartItem key={product._id}>
                       <ItemImage>
@@ -340,11 +386,22 @@ const Cart = () => {
                       </ItemInfo>
                       <div>
                         <QtyControl>
-                          <QtyBtn onClick={() => removeProduct(product._id)}>−</QtyBtn>
+                          <QtyBtn onClick={() => removeProduct(product._id)}>
+                            −
+                          </QtyBtn>
                           <QtyNum>{qty}</QtyNum>
-                          <QtyBtn onClick={() => addProduct(product._id)}>+</QtyBtn>
+                          <QtyBtn onClick={() => addProduct(product._id)}>
+                            +
+                          </QtyBtn>
                         </QtyControl>
-                        <div style={{ textAlign: 'center', marginTop: 6, fontWeight: 600, fontSize: '0.9rem' }}>
+                        <div
+                          style={{
+                            textAlign: "center",
+                            marginTop: 6,
+                            fontWeight: 600,
+                            fontSize: "0.9rem",
+                          }}
+                        >
                           Rs {qty * product.price}
                         </div>
                       </div>
@@ -363,30 +420,59 @@ const Cart = () => {
             <Box>
               <SectionTitle>Delivery Info</SectionTitle>
               <FormGroup>
-                <FormInput value={name} onChange={e => setName(e.target.value)} placeholder="Full name" />
+                <FormInput
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Full name"
+                />
               </FormGroup>
               <FormGroup>
-                <FormInput type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email address" />
+                <FormInput
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email address"
+                />
               </FormGroup>
               <FormGroup>
-                <FormInput value={phone} onChange={e => setPhone(e.target.value)} placeholder="Phone number" />
+                <FormInput
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Phone number"
+                />
               </FormGroup>
               <FormRow>
                 <FormGroup>
-                  <FormInput value={city} onChange={e => setCity(e.target.value)} placeholder="City" />
+                  <FormInput
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    placeholder="City"
+                  />
                 </FormGroup>
                 <FormGroup>
-                  <FormInput value={postalCode} onChange={e => setPostalCode(e.target.value)} placeholder="Postal code" />
+                  <FormInput
+                    value={postalCode}
+                    onChange={(e) => setPostalCode(e.target.value)}
+                    placeholder="Postal code"
+                  />
                 </FormGroup>
               </FormRow>
               <FormGroup>
-                <FormInput value={streetAddress} onChange={e => setStreetAddress(e.target.value)} placeholder="Street address" />
+                <FormInput
+                  value={streetAddress}
+                  onChange={(e) => setStreetAddress(e.target.value)}
+                  placeholder="Street address"
+                />
               </FormGroup>
               <FormGroup>
-                <FormInput value={country} onChange={e => setCountry(e.target.value)} placeholder="Country" />
+                <FormInput
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  placeholder="Country"
+                />
               </FormGroup>
               <CheckoutBtn onClick={goToPayment} disabled={loading}>
-                {loading ? 'Processing...' : 'Continue to Payment →'}
+                {loading ? "Processing..." : "Continue to Payment →"}
               </CheckoutBtn>
             </Box>
           )}
