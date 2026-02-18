@@ -338,8 +338,8 @@ const Cart = () => {
             <div>✅</div>
             <h2>Order Confirmed!</h2>
             <p>
-              Thanks for shopping at myPasal. We'll email you when your order is
-              on its way.
+              Thanks for shopping at myPasal. We&apos;ll email you when your
+              order is on its way.
             </p>
           </SuccessBox>
         </Center>
