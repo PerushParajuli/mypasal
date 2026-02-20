@@ -305,7 +305,7 @@ export default function Home({ newProducts }) {
           </HeroHeadline>
           <HeroSub>
             Curated products delivered to your door across Nepal.
-            Quality you can trust, prices you'll love.
+            Quality you can trust, prices you&apos;ll love.
           </HeroSub>
           <HeroCTAs>
             <PrimaryBtn href="/products">Shop Now →</PrimaryBtn>
