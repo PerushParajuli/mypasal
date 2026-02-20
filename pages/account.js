@@ -1,8 +1,9 @@
 import Header from "@/components/Header";
 import Center from "@/components/Center";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
+import axios from "axios";
 
 const PageWrapper = styled.div`min-height: 100vh;`;
 
@@ -11,6 +12,11 @@ const PageHeader = styled.div`
   color: #fff;
   padding: 56px 0 44px;
   margin-bottom: 60px;
+
+  @media (max-width: 768px) {
+    padding: 36px 0 28px;
+    margin-bottom: 36px;
+  }
 `;
 
 const Label = styled.div`
@@ -27,6 +33,10 @@ const PageTitle = styled.h1`
   margin: 0;
   font-weight: 700;
   letter-spacing: -1px;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
 `;
 
 const ContentGrid = styled.div`
@@ -37,6 +47,8 @@ const ContentGrid = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 20px;
+    padding-bottom: 48px;
   }
 `;
 
@@ -46,6 +58,11 @@ const Sidebar = styled.div`
   border: 1px solid #E2DDD6;
   padding: 24px;
   height: fit-content;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    border-radius: 12px;
+  }
 `;
 
 const Avatar = styled.img`
@@ -123,12 +140,22 @@ const MainPanel = styled.div`
   border-radius: 16px;
   border: 1px solid #E2DDD6;
   padding: 36px;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    border-radius: 12px;
+  }
 `;
 
 const PanelTitle = styled.h2`
   margin: 0 0 28px;
   font-size: 1.5rem;
   letter-spacing: -0.3px;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
 `;
 
 const FormGroup = styled.div`margin-bottom: 16px;`;
@@ -152,14 +179,20 @@ const FormInput = styled.input`
   font-size: 0.95rem;
   background: #F8F5F0;
   outline: none;
+  box-sizing: border-box;
   transition: border-color 0.2s;
   &:focus { border-color: #D4821A; background: #fff; }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
 `;
 
 const FormRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const SaveBtn = styled.button`
@@ -173,8 +206,29 @@ const SaveBtn = styled.button`
   font-weight: 600;
   cursor: pointer;
   margin-top: 8px;
-  transition: background 0.2s;
+  transition: background 0.2s, opacity 0.2s;
   &:hover { background: #F0A830; }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const Toast = styled.div`
+  display: inline-block;
+  margin-left: 14px;
+  font-size: 0.85rem;
+  color: ${props => props.error ? '#e74c3c' : '#2d6a4f'};
+  font-weight: 500;
+  vertical-align: middle;
+
+  @media (max-width: 768px) {
+    display: block;
+    margin-left: 0;
+    margin-top: 10px;
+    text-align: center;
+  }
 `;
 
 const EmptyPanel = styled.div`
@@ -183,9 +237,12 @@ const EmptyPanel = styled.div`
   color: #6B6B6B;
   div { font-size: 3rem; margin-bottom: 16px; }
   h3 { font-family: 'Playfair Display', serif; color: #1C1C1E; margin-bottom: 8px; }
+
+  @media (max-width: 768px) {
+    padding: 40px 16px;
+  }
 `;
 
-// Login screen shown when not authenticated
 const LoginBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -198,12 +255,21 @@ const LoginBox = styled.div`
   padding: 60px 40px;
   text-align: center;
   grid-column: 1 / -1;
+
+  @media (max-width: 768px) {
+    padding: 40px 24px;
+    min-height: 300px;
+  }
 `;
 
 const LoginTitle = styled.h2`
   font-size: 2rem;
   margin: 0 0 12px;
   letter-spacing: -0.5px;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const LoginDesc = styled.p`
@@ -211,6 +277,11 @@ const LoginDesc = styled.p`
   margin: 0 0 36px;
   font-size: 1rem;
   line-height: 1.6;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
 `;
 
 const GoogleBtn = styled.button`
@@ -227,16 +298,11 @@ const GoogleBtn = styled.button`
   font-weight: 600;
   cursor: pointer;
   transition: box-shadow 0.2s, border-color 0.2s;
-
   &:hover {
     border-color: #D4821A;
-    box-shadow: 0 4px 16px rgba(212, 130, 26, 0.15);
+    box-shadow: 0 4px 16px rgba(212,130,26,0.15);
   }
-
-  img {
-    width: 22px;
-    height: 22px;
-  }
+  img { width: 22px; height: 22px; }
 `;
 
 const AdminBadge = styled.div`
@@ -257,6 +323,41 @@ export default function AccountPage() {
   const [activeTab, setActiveTab] = useState('profile');
   const loading = status === "loading";
 
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName]   = useState('');
+  const [phone, setPhone]         = useState('');
+  const [profileLoaded, setProfileLoaded] = useState(false);
+  const [saving, setSaving]       = useState(false);
+  const [toast, setToast]         = useState('');
+  const [toastError, setToastError] = useState(false);
+
+  useEffect(() => {
+    if (!session || profileLoaded) return;
+    axios.get('/api/profile').then(res => {
+      const data = res.data;
+      setFirstName(data.firstName || session.user.name?.split(' ')[0] || '');
+      setLastName(data.lastName   || session.user.name?.split(' ').slice(1).join(' ') || '');
+      setPhone(data.phone || '');
+      setProfileLoaded(true);
+    });
+  }, [session]);
+
+  async function saveProfile() {
+    setSaving(true);
+    setToast('');
+    try {
+      await axios.put('/api/profile', { firstName, lastName, phone });
+      setToast('✓ Saved successfully');
+      setToastError(false);
+    } catch {
+      setToast('Failed to save. Try again.');
+      setToastError(true);
+    } finally {
+      setSaving(false);
+      setTimeout(() => setToast(''), 3000);
+    }
+  }
+
   return (
     <PageWrapper>
       <Header />
@@ -273,7 +374,8 @@ export default function AccountPage() {
               <div style={{ fontSize: '3.5rem', marginBottom: '20px' }}>👤</div>
               <LoginTitle>Sign in to myPasal</LoginTitle>
               <LoginDesc>
-                Track your orders, save your addresses,<br />and enjoy a personalised shopping experience.
+                Track your orders, save your addresses,<br />
+                and enjoy a personalised shopping experience.
               </LoginDesc>
               <GoogleBtn onClick={() => signIn("google")}>
                 <img src="https://www.google.com/favicon.ico" alt="Google" />
@@ -292,7 +394,7 @@ export default function AccountPage() {
                   : <AvatarPlaceholder>👤</AvatarPlaceholder>
                 }
                 {session.user.isAdmin && <AdminBadge>⚡ Admin</AdminBadge>}
-                <UserName>{session.user.name}</UserName>
+                <UserName>{profileLoaded ? `${firstName} ${lastName}`.trim() : session.user.name}</UserName>
                 <UserEmail>{session.user.email}</UserEmail>
 
                 <NavItem active={activeTab === 'profile' ? 1 : 0} onClick={() => setActiveTab('profile')}>👤 Profile</NavItem>
@@ -311,24 +413,48 @@ export default function AccountPage() {
                     <FormRow>
                       <FormGroup>
                         <FormLabel>First Name</FormLabel>
-                        <FormInput defaultValue={session.user.name?.split(' ')[0]} />
+                        <FormInput
+                          autoComplete="off"
+                          name="mypasal-firstname"
+                          value={firstName}
+                          onChange={e => setFirstName(e.target.value)}
+                        />
                       </FormGroup>
                       <FormGroup>
                         <FormLabel>Last Name</FormLabel>
-                        <FormInput defaultValue={session.user.name?.split(' ').slice(1).join(' ')} />
+                        <FormInput
+                          autoComplete="off"
+                          name="mypasal-lastname"
+                          value={lastName}
+                          onChange={e => setLastName(e.target.value)}
+                        />
                       </FormGroup>
                     </FormRow>
                     <FormGroup>
                       <FormLabel>Email</FormLabel>
-                      <FormInput defaultValue={session.user.email} disabled style={{ opacity: 0.6 }} />
+                      <FormInput
+                        autoComplete="off"
+                        value={session.user.email}
+                        disabled
+                      />
                     </FormGroup>
                     <FormGroup>
                       <FormLabel>Phone</FormLabel>
-                      <FormInput placeholder="+977 98XXXXXXXX" />
+                      <FormInput
+                        autoComplete="off"
+                        name="mypasal-phone"
+                        value={phone}
+                        onChange={e => setPhone(e.target.value)}
+                        placeholder="+977 98XXXXXXXX"
+                      />
                     </FormGroup>
-                    <SaveBtn>Save Changes</SaveBtn>
+                    <SaveBtn onClick={saveProfile} disabled={saving}>
+                      {saving ? 'Saving...' : 'Save Changes'}
+                    </SaveBtn>
+                    {toast && <Toast error={toastError ? 1 : 0}>{toast}</Toast>}
                   </>
                 )}
+
                 {activeTab === 'orders' && (
                   <>
                     <PanelTitle>Order History</PanelTitle>
@@ -339,19 +465,15 @@ export default function AccountPage() {
                     </EmptyPanel>
                   </>
                 )}
+
                 {activeTab === 'addresses' && (
                   <>
                     <PanelTitle>Saved Addresses</PanelTitle>
-                    <FormGroup>
-                      <FormLabel>Street Address</FormLabel>
-                      <FormInput placeholder="Street address" />
-                    </FormGroup>
-                    <FormRow>
-                      <FormGroup><FormLabel>City</FormLabel><FormInput placeholder="City" /></FormGroup>
-                      <FormGroup><FormLabel>Postal Code</FormLabel><FormInput placeholder="Postal code" /></FormGroup>
-                    </FormRow>
-                    <FormGroup><FormLabel>Country</FormLabel><FormInput placeholder="Country" /></FormGroup>
-                    <SaveBtn>Save Address</SaveBtn>
+                    <EmptyPanel>
+                      <div>📍</div>
+                      <h3>No addresses saved</h3>
+                      <p>Saved addresses will appear here.</p>
+                    </EmptyPanel>
                   </>
                 )}
               </MainPanel>

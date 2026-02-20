@@ -16,6 +16,10 @@ const fadeIn = keyframes`
 const PageWrapper = styled.div`
   min-height: 100vh;
   padding-bottom: 80px;
+
+  @media (max-width: 768px) {
+    padding-bottom: 48px;
+  }
 `;
 
 const Breadcrumb = styled.div`
@@ -23,17 +27,18 @@ const Breadcrumb = styled.div`
   font-size: 0.82rem;
   color: #6b6b6b;
 
+  @media (max-width: 768px) {
+    padding: 14px 0 0;
+    font-size: 0.78rem;
+  }
+
   a {
     color: #6b6b6b;
     text-decoration: none;
-    &:hover {
-      color: #d4821a;
-    }
+    &:hover { color: #d4821a; }
   }
 
-  span {
-    margin: 0 6px;
-  }
+  span { margin: 0 6px; }
 `;
 
 const ProductGrid = styled.div`
@@ -46,7 +51,8 @@ const ProductGrid = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 24px;
+    margin-top: 20px;
   }
 `;
 
@@ -63,13 +69,21 @@ const MainImage = styled.div`
   margin-bottom: 16px;
   min-height: 380px;
 
+  @media (max-width: 768px) {
+    padding: 28px;
+    min-height: 240px;
+    border-radius: 14px;
+  }
+
   img {
     max-width: 100%;
     max-height: 300px;
     object-fit: contain;
     transition: transform 0.3s ease;
-    &:hover {
-      transform: scale(1.04);
+    &:hover { transform: scale(1.04); }
+
+    @media (max-width: 768px) {
+      max-height: 180px;
     }
   }
 `;
@@ -93,15 +107,18 @@ const Thumbnail = styled.div`
   transition: border-color 0.2s;
   overflow: hidden;
 
+  @media (max-width: 768px) {
+    width: 56px;
+    height: 56px;
+  }
+
   img {
     max-width: 56px;
     max-height: 56px;
     object-fit: contain;
   }
 
-  &:hover {
-    border-color: #d4821a;
-  }
+  &:hover { border-color: #d4821a; }
 `;
 
 const InfoSection = styled.div``;
@@ -122,6 +139,10 @@ const ProductTitle = styled.h1`
   line-height: 1.2;
   letter-spacing: -0.5px;
   color: #1c1c1e;
+
+  @media (max-width: 768px) {
+    font-size: 1.4rem;
+  }
 `;
 
 const PriceTag = styled.div`
@@ -130,6 +151,10 @@ const PriceTag = styled.div`
   font-weight: 700;
   color: #1c1c1e;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 1.7rem;
+  }
 
   span {
     font-size: 1rem;
@@ -151,6 +176,11 @@ const StockInfo = styled.div`
     props.out ? "#f9f9f9" : props.low ? "#fef9f0" : "#f0faf4"};
   border: 1px solid
     ${(props) => (props.out ? "#E2DDD6" : props.low ? "#f5c677" : "#b7dfca")};
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
 `;
 
 const StockDot = styled.div`
@@ -172,6 +202,12 @@ const StockSub = styled.div`
   font-size: 0.78rem;
   color: #6b6b6b;
   margin-left: auto;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    width: 100%;
+    padding-left: 17px;
+  }
 `;
 
 const Description = styled.p`
@@ -217,13 +253,8 @@ const QtyBtn = styled.button`
   justify-content: center;
   color: #1c1c1e;
 
-  &:hover:not(:disabled) {
-    background: #e2ddd6;
-  }
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
+  &:hover:not(:disabled) { background: #e2ddd6; }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
 `;
 
 const QtyNum = styled.span`
@@ -254,20 +285,20 @@ const AddToCartBtn = styled.button`
   font-size: 1.05rem;
   font-weight: 700;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
-  transition:
-    background 0.2s,
-    transform 0.15s;
+  transition: background 0.2s, transform 0.15s;
   letter-spacing: 0.3px;
+
+  @media (max-width: 768px) {
+    padding: 15px 20px;
+    font-size: 0.95rem;
+  }
 
   &:hover:not(:disabled) {
     background: ${(props) => (props.added ? "#333" : "#F0A830")};
     transform: translateY(-2px);
   }
 
-  svg {
-    width: 20px;
-    height: 20px;
-  }
+  svg { width: 20px; height: 20px; }
 `;
 
 const Divider = styled.hr`
@@ -282,30 +313,16 @@ const MetaRow = styled.div`
   font-size: 0.85rem;
   color: #6b6b6b;
 
-  strong {
-    color: #1c1c1e;
-  }
+  strong { color: #1c1c1e; }
 `;
 
 function getStockInfo(quantity) {
   if (quantity === 0)
-    return {
-      label: "Out of stock",
-      sub: "This item is currently unavailable",
-      type: "out",
-    };
+    return { label: "Out of stock", sub: "This item is currently unavailable", type: "out" };
   if (quantity <= 3)
-    return {
-      label: `Only ${quantity} left!`,
-      sub: "Order soon before it sells out",
-      type: "low",
-    };
+    return { label: `Only ${quantity} left!`, sub: "Order soon before it sells out", type: "low" };
   if (quantity <= 10)
-    return {
-      label: `Low stock — ${quantity} remaining`,
-      sub: "Limited availability",
-      type: "low",
-    };
+    return { label: `Low stock — ${quantity} remaining`, sub: "Limited availability", type: "low" };
   return { label: "In stock", sub: `${quantity} units available`, type: "ok" };
 }
 
@@ -407,23 +424,11 @@ export default function ProductPage({ product }) {
               <QtyRow>
                 <QtyLabel>Qty</QtyLabel>
                 <QtyControl>
-                  <QtyBtn
-                    onClick={() => handleAddQty(-1)}
-                    disabled={addQty <= 1}
-                  >
-                    −
-                  </QtyBtn>
+                  <QtyBtn onClick={() => handleAddQty(-1)} disabled={addQty <= 1}>−</QtyBtn>
                   <QtyNum>{addQty}</QtyNum>
-                  <QtyBtn
-                    onClick={() => handleAddQty(1)}
-                    disabled={addQty >= remaining}
-                  >
-                    +
-                  </QtyBtn>
+                  <QtyBtn onClick={() => handleAddQty(1)} disabled={addQty >= remaining}>+</QtyBtn>
                 </QtyControl>
-                {inCart > 0 && (
-                  <InCartNote>{inCart} already in cart</InCartNote>
-                )}
+                {inCart > 0 && <InCartNote>{inCart} already in cart</InCartNote>}
               </QtyRow>
             )}
 

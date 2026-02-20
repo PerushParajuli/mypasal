@@ -1,42 +1,35 @@
-import { createContext, useEffect, useState } from "react";
-
+import { createContext, useEffect, useState, useRef } from "react";
 export const CartContext = createContext({});
 
 export function CartContextProvider({ children }) {
   const ls = typeof window !== 'undefined' ? window.localStorage : null;
-
   const [cartProducts, setCartProducts] = useState([]);
-  // stockLimits: { [productId]: maxQuantity }
   const [stockLimits, setStockLimits] = useState({});
+  const [mounted, setMounted] = useState(false);
+  const stockLimitsRef = useRef({});
+  const isFirstRun = useRef(true);
 
   useEffect(() => {
-    if (ls && ls.getItem('cart')) {
-      setCartProducts(JSON.parse(ls.getItem('cart')));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (cartProducts?.length > 0) {
-      ls?.setItem("cart", JSON.stringify(cartProducts));
+    if (isFirstRun.current) {
+      const saved = ls?.getItem('cart');
+      if (saved) setCartProducts(JSON.parse(saved));
+      isFirstRun.current = false;
+      setMounted(true);
     } else {
-      ls?.setItem("cart", JSON.stringify([]));
+      ls?.setItem("cart", JSON.stringify(cartProducts ?? []));
     }
   }, [cartProducts]);
 
   function registerStock(productId, quantity) {
+    stockLimitsRef.current[productId] = quantity;
     setStockLimits(prev => ({ ...prev, [productId]: quantity }));
   }
 
   function addProduct(productId) {
     setCartProducts(prev => {
       const currentQty = prev.filter(id => id === productId).length;
-      const maxQty = stockLimits[productId];
-
-      // If we have a stock limit and it's reached, don't add
-      if (maxQty !== undefined && currentQty >= maxQty) {
-        return prev;
-      }
-
+      const maxQty = stockLimitsRef.current[productId];
+      if (maxQty !== undefined && currentQty >= maxQty) return prev;
       return [...prev, productId];
     });
   }
@@ -44,9 +37,7 @@ export function CartContextProvider({ children }) {
   function removeProduct(productId) {
     setCartProducts(prev => {
       const pos = prev.indexOf(productId);
-      if (pos !== -1) {
-        return prev.filter((_, index) => index !== pos);
-      }
+      if (pos !== -1) return prev.filter((_, i) => i !== pos);
       return prev;
     });
   }
@@ -58,20 +49,16 @@ export function CartContextProvider({ children }) {
 
   function isAtStockLimit(productId) {
     const currentQty = cartProducts.filter(id => id === productId).length;
-    const maxQty = stockLimits[productId];
+    const maxQty = stockLimitsRef.current[productId];
     return maxQty !== undefined && currentQty >= maxQty;
   }
 
   return (
     <CartContext.Provider value={{
-      cartProducts,
-      setCartProducts,
-      addProduct,
-      removeProduct,
-      clearCart,
-      registerStock,
-      isAtStockLimit,
-      stockLimits,
+      cartProducts, setCartProducts,
+      addProduct, removeProduct, clearCart,
+      registerStock, isAtStockLimit, stockLimits,
+      mounted,
     }}>
       {children}
     </CartContext.Provider>

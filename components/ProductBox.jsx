@@ -16,6 +16,8 @@ const ProductWrapper = styled.div`
   border: 1px solid #E2DDD6;
   transition: box-shadow 0.25s, transform 0.25s;
   animation: ${fadeUp} 0.4s ease both;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     box-shadow: 0 12px 40px rgba(28, 28, 30, 0.12);
@@ -47,6 +49,9 @@ const ImageBox = styled(Link)`
 
 const ProductInfoBox = styled.div`
   padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `;
 
 const ProductTitle = styled(Link)`
@@ -57,6 +62,7 @@ const ProductTitle = styled(Link)`
   display: block;
   margin-bottom: 8px;
   line-height: 1.4;
+  flex: 1;
   &:hover { color: #D4821A; }
 `;
 
@@ -76,6 +82,7 @@ const PriceRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: auto;
 `;
 
 const Price = styled.div`
@@ -119,20 +126,20 @@ const AddBtn = styled.button`
 `;
 
 const ProductBox = ({ _id, title, price, images, quantity }) => {
-  const { addProduct, registerStock, isAtStockLimit, cartProducts } = useContext(CartContext);
+  const { addProduct, registerStock, isAtStockLimit, cartProducts, mounted } = useContext(CartContext);
   const [added, setAdded] = useState(false);
   const url = '/product/' + _id;
 
-  // Register this product's stock limit with CartContext
   useEffect(() => {
     if (_id && quantity !== undefined) {
       registerStock(_id, quantity);
     }
   }, [_id, quantity]);
 
-  const currentQty = cartProducts.filter(id => id === _id).length;
+  // Before mounted, show safe defaults to match SSR
+  const currentQty = mounted ? cartProducts.filter(id => id === _id).length : 0;
   const outOfStock = quantity === 0;
-  const atLimit = isAtStockLimit(_id);
+  const atLimit = mounted ? isAtStockLimit(_id) : false;
 
   function handleAdd() {
     if (outOfStock || atLimit) return;
@@ -144,7 +151,7 @@ const ProductBox = ({ _id, title, price, images, quantity }) => {
   function getStockLabel() {
     if (quantity === 0) return null;
     if (quantity <= 5) return `Only ${quantity} left`;
-    return null; // Don't show badge for well-stocked items
+    return null;
   }
 
   const stockLabel = getStockLabel();
